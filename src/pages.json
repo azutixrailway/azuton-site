@@ -1,0 +1,47 @@
+[
+  {
+    "slug": "",
+    "file": "index",
+    "title": "Azuton"
+  },
+  {
+    "slug": "sobre",
+    "file": "sobre",
+    "title": "Sobre a Azuton"
+  },
+  {
+    "slug": "solucoes",
+    "file": "solucoes",
+    "title": "Soluções Azuton"
+  },
+  {
+    "slug": "azuphone-pabx-nuvem",
+    "file": "azuphone-pabx-nuvem",
+    "title": "AzuPhone PABX Nuvem"
+  },
+  {
+    "slug": "portabilidade",
+    "file": "portabilidade",
+    "title": "Portabilidade AzuPhone"
+  },
+  {
+    "slug": "downloads",
+    "file": "downloads",
+    "title": "Downloads"
+  },
+  {
+    "slug": "pabx-voz-ia",
+    "file": "pabx-voz-ia",
+    "title": "PABX com Voz IA"
+  },
+  {
+    "slug": "integracoes-agentes-ia",
+    "file": "integracoes-agentes-ia",
+    "title": "Integrações com Agentes IA"
+  },
+  {
+    "slug": "contato",
+    "file": "contato",
+    "title": "Contato Azuton"
+  }
+]
