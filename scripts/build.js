@@ -59,6 +59,14 @@ const META = {
     es: ['AzuPhone PBX en la Nube — PBX virtual en 24 horas | Azuton',
          'PBX en la nube, también llamado PBX virtual: extensión en la oficina, en el móvil y en la sucursal, con el mismo número. Del 30% al 40% de ahorro y un Personal Tec dedicado.'],
   },
+  'pabx-virtual': {
+    pt: ['PABX Virtual Empresarial — ativo em 24 horas | Azuton',
+         'PABX Virtual com chamadas ilimitadas, ramal no celular, gravação com sigilo e suporte no Brasil. Sem prazo contratual e com aparelhos inclusos.'],
+    en: ['Virtual PBX for business — live in 24 hours | Azuton',
+         'Virtual PBX with unlimited calls, your extension on mobile, recording with strict access control and support in Brazil. No lock-in contract, handsets included.'],
+    es: ['PBX Virtual Empresarial — activo en 24 horas | Azuton',
+         'PBX Virtual con llamadas ilimitadas, extensión en el móvil, grabación con confidencialidad y soporte en Brasil. Sin permanencia y con equipos incluidos.'],
+  },
   portabilidade: {
     pt: ['Portabilidade de número para o AzuPhone | Azuton',
          'Leve o número que seus clientes já conhecem para o PABX em nuvem da Azuton. Você troca de PABX, não de número.'],
@@ -116,6 +124,8 @@ const MIGRATED = {
   '/': '/',
   '/azuphone/': '/azuphone-pabx-nuvem',
   '/azuphone-pabx-nuvem/': '/azuphone-pabx-nuvem',
+  '/pabx%20virtual/': '/pabx-virtual',
+  '/pabx-virtual/': '/pabx-virtual',
   '/portabilidade/': '/portabilidade',
   '/contato/': '/contato',
   '/sobre/': '/sobre',

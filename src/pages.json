@@ -20,6 +20,11 @@
     "title": "AzuPhone PABX Nuvem"
   },
   {
+    "slug": "pabx-virtual",
+    "file": "pabx-virtual",
+    "title": "PABX Virtual Empresarial"
+  },
+  {
     "slug": "portabilidade",
     "file": "portabilidade",
     "title": "Portabilidade AzuPhone"

@@ -257,7 +257,9 @@
   "k256": "De lunes a viernes, de 8:00 a 18:00 (BRT).",
   "navDownloads": "Descargas",
   "footDownloads": "Descargas",
-  "filmCap": "PBX en la Nube — Azuton Presenta"
+  "filmCap": "PBX en la Nube — Azuton Presenta",
+  "navPabxVirtual": "PBX Virtual",
+  "footPabxVirtual": "PBX Virtual"
  },
  "attr": {}
 }

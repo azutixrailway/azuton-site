@@ -69,7 +69,9 @@
   "k034": "What the Personal Tec is <svg aria-hidden=\"true\" class=\"btn__arrow\" viewbox=\"0 0 18 8\"><path d=\"M0 4h15M12 1l3 3-3 3\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"></path></svg>",
   "k045": "Check the AzuPhone FAQ <svg aria-hidden=\"true\" class=\"btn__arrow\" viewbox=\"0 0 18 8\"><path d=\"M0 4h15M12 1l3 3-3 3\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"></path></svg>",
   "k046": "Talk to Azuton <svg aria-hidden=\"true\" class=\"btn__arrow\" viewbox=\"0 0 18 8\"><path d=\"M0 4h15M12 1l3 3-3 3\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"></path></svg>",
-  "navDownloads": "Downloads"
+  "navDownloads": "Downloads",
+  "navPabxVirtual": "Virtual PBX",
+  "footPabxVirtual": "Virtual PBX"
  },
  "attr": {}
 }

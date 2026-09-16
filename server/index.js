@@ -104,7 +104,10 @@ app.use(express.static(DIST, { index: false, redirect: false, maxAge: '1h' }))
 const REDIRECT = {
   '/azuphone': '/azuphone-pabx-nuvem',
   '/pabx-nuvem': '/azuphone-pabx-nuvem',
-  '/pabx-virtual': '/azuphone-pabx-nuvem',
+  // a URL antiga do WordPress tinha um espaco no meio: /pabx virtual/
+  '/pabx%20virtual': '/pabx-virtual',
+  '/pabx virtual': '/pabx-virtual',
+  '/pabx-virtual-empresarial': '/pabx-virtual',
   '/voz-ia': '/pabx-voz-ia',
   '/integracoes': '/integracoes-agentes-ia',
   '/solucoes-azuton': '/solucoes',

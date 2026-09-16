@@ -3,7 +3,7 @@
 Site institucional da Azuton em três idiomas — português, inglês e espanhol —
 com formulários que entregam os leads por e-mail via Resend.
 
-Nove páginas, cada uma gerada nos três idiomas no momento do build: 27 páginas
+Dez páginas, cada uma gerada nos três idiomas no momento do build: 30 páginas
 HTML estáticas servidas por um servidor Node enxuto, que só faz duas coisas —
 entregar os arquivos e receber os formulários.
 
@@ -73,8 +73,12 @@ Crie o repositório vazio antes, em <https://github.com/new>, **sem** README,
 ## Deploy na Railway
 
 1. **New Project → Deploy from GitHub repo** e escolha `azuton-site`.
-2. A Railway lê o `railway.json` e usa `npm ci && npm run build` para montar e
-   `npm start` para servir. Não precisa configurar build command na mão.
+2. A Railway lê o `railway.json` e usa `npm run build` para montar e `npm start`
+   para servir. Não precisa configurar build command na mão.
+
+   O `buildCommand` **não** inclui `npm ci`: o builder da Railway já instala as
+   dependências na fase anterior, e rodar de novo colide com o cache montado em
+   `node_modules`, quebrando o build com `EBUSY`.
 3. Em **Variables**, cole o conteúdo do seu `.env` (a Railway aceita colar o
    bloco inteiro de uma vez). Não defina `PORT` — ela injeta.
 4. Em **Settings → Networking**, gere o domínio. Teste o site no endereço
@@ -190,7 +194,7 @@ Depois de qualquer mudança: `npm run build && npm run check`.
   quantidade de campos, e proteção contra injeção de cabeçalho de e-mail.
 - `GET /healthz` — health check da Railway.
 - Canoniza URLs: `/sobre/` redireciona para `/sobre`; `/en` para `/en/`.
-- Redireciona as URLs antigas: `/azuphone`, `/pabx-nuvem`, `/pabx-virtual`,
+- Redireciona as URLs antigas: `/azuphone`, `/pabx-nuvem`, `/pabx virtual`,
   `/voz-ia`, `/integracoes`.
 - Página 404 própria, no idioma da URL.
 - Vídeos do YouTube carregam só depois do clique, na versão sem cookies. A

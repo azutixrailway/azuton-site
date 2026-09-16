@@ -154,7 +154,9 @@
   "k152": "Av. Marques de São Vicente, 121<br/>São Paulo – SP, Brazil",
   "k153": "Monday to Friday, 8am to 6pm (BRT).",
   "navDownloads": "Downloads",
-  "footDownloads": "Downloads"
+  "footDownloads": "Downloads",
+  "navPabxVirtual": "Virtual PBX",
+  "footPabxVirtual": "Virtual PBX"
  },
  "attr": {
   "a154": "Pipedrive, Zoho, in-house…"
