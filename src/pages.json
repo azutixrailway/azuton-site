@@ -45,6 +45,16 @@
     "title": "Integrações com Agentes IA"
   },
   {
+    "slug": "revenda-pabx-nuvem",
+    "file": "revenda-pabx-nuvem",
+    "title": "Revenda PABX em Nuvem"
+  },
+  {
+    "slug": "blog",
+    "file": "blog",
+    "title": "Blog Azuton"
+  },
+  {
     "slug": "contato",
     "file": "contato",
     "title": "Contato Azuton"
