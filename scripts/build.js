@@ -5,7 +5,7 @@ const __filename = new URL(import.meta.url).pathname;
 const __dirname = path.dirname(__filename);
 
 const SRC_DIR = path.join(__dirname, '..', 'src');
-const OUT_DIR = path.join(__dirname, '..', 'out');
+const OUT_DIR = path.join(__dirname, '..', 'dist');
 const PAGES_FILE = path.join(SRC_DIR, 'pages.json');
 const I18N_DIR = path.join(SRC_DIR, 'i18n');
 
