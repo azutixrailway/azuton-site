@@ -171,8 +171,19 @@ if (!fs.existsSync(langDir)) {
 fs.mkdirSync(langDir, { recursive: true });
 }
 
-// Cria o arquivo HTML com o slug como nome
-const outPath = path.join(langDir, `${slug}.html`);
+// Para home, salva como index.html na raiz do lang
+// Para outras páginas, cria uma pasta com index.html dentro
+let outPath;
+if (slug === 'index') {
+outPath = path.join(langDir, 'index.html');
+} else {
+const pageDir = path.join(langDir, slug);
+if (!fs.existsSync(pageDir)) {
+fs.mkdirSync(pageDir, { recursive: true });
+}
+outPath = path.join(pageDir, 'index.html');
+}
+
 fs.writeFileSync(outPath, html, 'utf8');
 });
 });
