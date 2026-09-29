@@ -1,7 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-const { JSDOM } = require('jsdom');
-const { loadSync } = require('node-html-parser');
+import fs from 'fs';
+import path from 'path';
+import { JSDOM } from 'jsdom';
+
+const __filename = new URL(import.meta.url).pathname;
+const __dirname = path.dirname(__filename);
 
 const SRC_DIR = path.join(__dirname, '..', 'src');
 const OUT_DIR = path.join(__dirname, '..', 'out');
@@ -113,7 +115,7 @@ const build = () => {
 
   // Count pages
   const htmlFiles = fs.readdirSync(OUT_DIR, { recursive: true }).filter(f => f.endsWith('.html'));
-  console.log(`✓ Build complete: ${htmlFiles.length} pages × ${LANGUAGES.length} languages = ${htmlFiles.length} URLs`);
+  console.log(`✓ Build complete: ${htmlFiles.length} pages generated`);
 };
 
 build();
