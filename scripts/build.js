@@ -12,6 +12,12 @@ const I18N_DIR = path.join(SRC_DIR, 'i18n');
 const LANGUAGES = ['pt', 'en', 'es'];
 const DEFAULT_LANG = 'pt';
 
+console.log(`🔍 DEBUG BUILD.JS`);
+console.log(`__dirname = ${__dirname}`);
+console.log(`SRC_DIR = ${SRC_DIR}`);
+console.log(`OUT_DIR = ${OUT_DIR}`);
+console.log(`PAGES_FILE = ${PAGES_FILE}`);
+
 // SEO metadata per page
 const META = {
   home: {
@@ -79,8 +85,11 @@ const build = () => {
 
   // Create output directory
   if (!fs.existsSync(OUT_DIR)) {
+    console.log(`Creating OUT_DIR: ${OUT_DIR}`);
     fs.mkdirSync(OUT_DIR, { recursive: true });
   }
+
+  console.log(`OUT_DIR exists? ${fs.existsSync(OUT_DIR)}`);
 
   pages.forEach((page) => {
     const pagePath = path.join(SRC_DIR, 'pages', `${page.file}.html`);
@@ -112,9 +121,12 @@ const build = () => {
     });
   });
 
-  // Count pages
+  // Count pages and verify
   const htmlFiles = fs.readdirSync(OUT_DIR, { recursive: true }).filter(f => f.endsWith('.html'));
   console.log(`✓ Build complete: ${htmlFiles.length} pages generated`);
+  console.log(`Files in OUT_DIR: ${htmlFiles.join(', ')}`);
+  console.log(`OUT_DIR still exists? ${fs.existsSync(OUT_DIR)}`);
+  console.log(`index.html exists? ${fs.existsSync(path.join(OUT_DIR, 'index.html'))}`);
 };
 
 build();
