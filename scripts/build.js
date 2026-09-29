@@ -106,8 +106,18 @@ const build = () => {
         fs.mkdirSync(langDir, { recursive: true });
       }
 
-      // Write HTML file
-      const outPath = path.join(langDir, `${slug}.html`);
+      // Determina o caminho de saída: home vai na raiz, outras em pastas
+      let outPath;
+      if (slug === 'home') {
+        outPath = path.join(langDir, 'index.html');
+      } else {
+        const slugDir = path.join(langDir, slug);
+        if (!fs.existsSync(slugDir)) {
+          fs.mkdirSync(slugDir, { recursive: true });
+        }
+        outPath = path.join(slugDir, 'index.html');
+      }
+
       fs.writeFileSync(outPath, html, 'utf8');
     });
   });
