@@ -24,7 +24,7 @@
 {{LANGSWITCH}}
 </div>
 <a class="top__tel" href="tel:+551142001232">(11) 4200-1232</a>
-<a class="top__cta" data-i18n="k010" href="#contato">Orçamento</a>
+<a class="top__cta" data-i18n="k010" href="#orcamento-rapido">Orçamento</a>
 </div>
 </div>
 <nav aria-label="Seções desta página" class="subnav">
@@ -53,10 +53,10 @@
 <p class="hero__lead" data-i18n="k024">Na Azuton, acreditamos que a comunicação unificada, em conjunto com tecnologia, inovação e segurança digital, é o caminho para revolucionar empresas.</p>
 <div class="btns">
 <a class="btn" data-i18n="k025" href="#solucoes">Conheça nossas soluções
-            <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 <a class="btn btn--ghost" data-i18n="k026" href="tel:+551142001232">Falar com especialista
-            <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 </div>
@@ -106,38 +106,35 @@
 <!-- FORMULARIO RAPIDO -->
 <section class="qf" id="orcamento-rapido">
 <div class="wrap qf__in">
-<div class="qf__head">
-<p class="qf__k" data-i18n="k035">Orçamento sem compromisso</p>
-<p class="qf__t" data-i18n="k036">Um especialista da Azuton fala com você</p>
-<p class="qf__s" data-i18n="k037">Quatro campos e pronto. Nosso time comercial retorna no mesmo dia útil, sem compromisso.</p>
-<div class="qf__alt">
-<a href="tel:+551142001232">(11) 4200-1232</a>
-<a data-i18n="k038" href="https://wa.me/551151520050">WhatsApp</a>
-<a data-i18n="k039" href="mailto:azuton@azuton.com">azuton@azuton.com</a>
-</div>
-</div>
-<form class="form qf__f" data-produto="Home — Azuton" data-wa="551151520050">
+<div class="form-card">
+<span class="label label--blue" data-i18n="k035">Orçamento</span>
+<h2 data-i18n="k036">Orçamento sem compromisso</h2>
+<p data-i18n="k037">Um especialista da Azuton fala com você.</p>
+<form class="form" data-produto="Home — Azuton" data-wa="551151520050">
 <div class="frow">
-<label data-i18n="k040" for="orcamentorapido-nome">Nome <span class="req">*</span></label>
-<input autocomplete="name" id="orcamentorapido-nome" name="Nome" required="" type="text"/>
+<label data-i18n="k040" for="home-nome">Nome <span class="req">*</span></label>
+<input autocomplete="name" id="home-nome" name="Nome" required type="text"/>
 </div>
 <div class="frow">
-<label data-i18n="k041" for="orcamentorapido-emp">Empresa <span class="req">*</span></label>
-<input autocomplete="organization" id="orcamentorapido-emp" name="Empresa" required="" type="text"/>
+<label data-i18n="k041" for="home-emp">Empresa <span class="req">*</span></label>
+<input autocomplete="organization" id="home-emp" name="Empresa" required type="text"/>
 </div>
-<div class="frow">
-<label data-i18n="k042" for="orcamentorapido-mail">E-mail corporativo <span class="req">*</span></label>
-<input autocomplete="email" id="orcamentorapido-mail" name="E-mail" required="" type="email"/>
+<div class="frow frow--cols-2">
+<div>
+<label data-i18n="k042" for="home-email">E-mail corporativo <span class="req">*</span></label>
+<input autocomplete="email" id="home-email" name="E-mail" required type="email"/>
 </div>
-<div class="frow">
-<label data-i18n="k043" for="orcamentorapido-tel">(DDD) Telefone <span class="req">*</span></label>
-<input autocomplete="tel" id="orcamentorapido-tel" name="Telefone" required="" type="tel"/>
+<div>
+<label data-i18n="k043" for="home-tel">(DDD) Telefone <span class="req">*</span></label>
+<input autocomplete="tel" id="home-tel" name="Telefone" required type="tel"/>
 </div>
-<div class="qf__go">
-<button class="btn" data-i18n="k044" type="submit">Pedir orçamento <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></button>
-<p class="qf__note" data-i18n="k045">Seus dados abrem uma conversa já preenchida com o time comercial. Seg. a sex., 8h às 18h.</p>
 </div>
+<div class="form-actions">
+<button class="btn" type="submit" data-i18n="k044">Pedir orçamento</button>
+</div>
+<p class="form-help" data-i18n="k045">Seg-Sex, 8h-18h. Resposta no mesmo dia útil.</p>
 </form>
+</div>
 </div>
 </section>
 <!-- CLIENTES -->
@@ -164,31 +161,31 @@
 <div aria-label="Soluções Azuton" class="svc__index" role="tablist">
 <button aria-selected="true" class="svc__btn" data-i18n="k051" data-panel="s1" role="tab">
 <span class="n">01</span>Retorno do investimento
-              <span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
+<span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
 </button>
 <button aria-selected="false" class="svc__btn" data-i18n="k052" data-panel="s2" role="tab">
 <span class="n">02</span>Link dedicado
-              <span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
+<span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
 </button>
 <button aria-selected="false" class="svc__btn" data-i18n="k053" data-panel="s3" role="tab">
 <span class="n">03</span>Fazendas, clima e solo
-              <span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
+<span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
 </button>
 <button aria-selected="false" class="svc__btn" data-i18n="k054" data-panel="s4" role="tab">
 <span class="n">04</span>IOT em LPWA
-              <span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
+<span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
 </button>
 <button aria-selected="false" class="svc__btn" data-i18n="k055" data-panel="s5" role="tab">
 <span class="n">05</span>Segurança para IOT
-              <span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
+<span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
 </button>
 <button aria-selected="false" class="svc__btn" data-i18n="k056" data-panel="s6" role="tab">
 <span class="n">06</span>Azuton IOT
-              <span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
+<span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
 </button>
 <button aria-selected="false" class="svc__btn" data-i18n="k057" data-panel="s7" role="tab">
 <span class="n">07</span>AzuPhone
-              <span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
+<span class="a"><svg aria-hidden="true" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg></span>
 </button>
 </div>
 <div class="svc__panels">
@@ -198,7 +195,7 @@
 <h3 class="svc__name" data-i18n="k059">Retorno do investimento</h3>
 <p data-i18n="k060">Tenha um aumento de produtividade no seu negócio e aumente de duas a seis vezes o valor do seu investimento.</p>
 <a class="btn btn--ghost" data-i18n="k061" href="https://azuton.com/">Saiba mais
-                  <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 <div class="svc__art">
@@ -215,7 +212,7 @@
 <h3 class="svc__name" data-i18n="k063">Link dedicado</h3>
 <p data-i18n="k064">Nossos serviços de internet dedicada são rápidos, consistentes e ajudam a entregar com segurança as capacidades que sua empresa exige.</p>
 <a class="btn btn--ghost" data-i18n="k065" href="https://azuton.com/link-dedicado/">Saiba mais
-                  <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 <div class="svc__art">
@@ -231,7 +228,7 @@
 <h3 class="svc__name" data-i18n="k067">Fazendas, clima e solo</h3>
 <p data-i18n="k068">Esses dispositivos e sensores oferecem ao produtor a flexibilidade para monitorar parâmetros importantes, além de controlar remotamente operações.</p>
 <a class="btn btn--ghost" data-i18n="k069" href="https://azuton.com/fazendas-clima-solo/">Saiba mais
-                  <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 <div class="svc__art">
@@ -247,7 +244,7 @@
 <h3 class="svc__name" data-i18n="k071">IOT em LPWA</h3>
 <p data-i18n="k072">A Azuton e a tecnologia LPWA, projetada pela SigFox, abordam o crescente mercado de aplicativos da internet e seus requisitos.</p>
 <a class="btn btn--ghost" data-i18n="k073" href="https://azuton.com/iot-em-lpwa/">Saiba mais
-                  <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 <div class="svc__art">
@@ -264,7 +261,7 @@
 <h3 class="svc__name" data-i18n="k075">Segurança para IOT</h3>
 <p data-i18n="k076">Uma solução integral, convergente e adaptativa baseada na aplicação de inteligência para detectar fraude digital em tempo real e de forma antecipada.</p>
 <a class="btn btn--ghost" data-i18n="k077" href="https://azuton.com/seguranca-para-iot/">Saiba mais
-                  <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 <div class="svc__art">
@@ -280,7 +277,7 @@
 <h3 class="svc__name" data-i18n="k079">Azuton IOT</h3>
 <p data-i18n="k080">Oferecemos cobertura global com conhecimentos das redes, o suporte, a conectividade e a confiabilidade para melhor experiência da sua empresa.</p>
 <a class="btn btn--ghost" data-i18n="k081" href="https://azuton.com/azuton-iot/">Saiba mais
-                  <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 <div class="svc__art">
@@ -297,7 +294,7 @@
 <h3 class="svc__name" data-i18n="k083">AzuPhone</h3>
 <p data-i18n="k084">Com o AzuPhone, você conta com ramais telefônicos totalmente em nuvem, que podem ser acessados em qualquer lugar com internet.</p>
 <a class="btn" data-i18n="k085" href="https://azuton.com/azuphone/">Saiba mais
-                  <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 <div class="svc__art">
@@ -306,7 +303,6 @@
 <rect class="g-fill" height="20" width="12" x="16" y="8"></rect>
 <circle class="g-fill-ink" cx="22" cy="36" r="3"></circle>
 </svg>
-</div>
 </div>
 </div>
 </div>
@@ -401,7 +397,7 @@
 <h2 data-i18n="k117">Nosso objetivo é inovar por meio da comunicação</h2>
 <p data-i18n="k118">A Azuton atua há mais de dez anos no mercado de tecnologia e, atualmente, é uma das principais solucionadoras de negócios no Brasil. Trabalhamos para oferecer conectividade e inserir privacidade e confiança na vida digital das empresas, principalmente por meio da comunicação unificiada.</p>
 <a class="btn btn--ghost" data-i18n="k119" href="https://azuton.com/sobre/">Conheça a Azuton
-          <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 <div class="split__art">
@@ -425,7 +421,7 @@
 <h2 data-i18n="k121">Uma solução inovadora para transformar negócios</h2>
 <p data-i18n="k122">Já pensou em realizar ligações comerciais com os ramais da sua empresa de casa, sem cabos e telefones fixos? Com o AzuPhone, é possível transferir os serviços do seu negócio para o home office com segurança e garantia de qualidade.</p>
 <a class="btn" data-i18n="k123" href="https://azuton.com/azuphone/">Conheça o AzuPhone
-          <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 <div class="split__art">
@@ -447,7 +443,7 @@
 <div class="wrap strip__in">
 <p data-i18n="k124">Já pensou em revolucionar o mercado com uma solução de qualidade e ainda conquistar a tão sonhada renda recorrente? Seja um agente AzuPhone e transforme sua carreira!</p>
 <a class="btn btn--ondeep" data-i18n="k125" href="{{BASE}}/contato">Quero ser um agente
-        <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 </section>
@@ -459,7 +455,7 @@
 <h2 data-i18n="k127">Fique por dentro do mercado de tecnologia</h2>
 <p data-i18n="k128">Mantenha-se atualizado sobre o mercado de tecnologia e comunicação unificada com quem entende do assunto! Em nosso blog, você confere artigos importantes sobre inovação, segurança digital, PABX virtual, além de dicas para melhorar as vendas autônomas.</p>
 <a class="btn btn--ghost" data-i18n="k129" href="https://azuton.com/blog/">Acessar o blog
-          <svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
+<svg aria-hidden="true" class="btn__arrow" viewBox="0 0 18 8"><path d="M0 4h15M12 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>
 </a>
 </div>
 </div>
@@ -544,19 +540,19 @@
 <svg aria-hidden="true" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.15h-.01a8.23 8.23 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 2.2 0 4.27.86 5.83 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23Zm4.52-6.17c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.44.13-.15.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.76-1.84-.2-.48-.4-.42-.56-.43h-.47c-.17 0-.44.06-.66.31-.23.25-.87.85-.87 2.07s.89 2.4 1.02 2.56c.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.14-1.18-.06-.11-.22-.17-.47-.29Z"></path></svg>
 </a>
 <script>
-  (function(){
-    var btns = Array.prototype.slice.call(document.querySelectorAll('.svc__btn'));
-    function show(active){
-      btns.forEach(function(b){
-        var panel = document.getElementById(b.dataset.panel);
-        var on = (b === active);
-        b.setAttribute('aria-selected', on ? 'true' : 'false');
-        if (panel) panel.hidden = !on;
-      });
-    }
-    btns.forEach(function(b){
-      b.addEventListener('click', function(){ show(b); });
-      b.addEventListener('mouseenter', function(){ show(b); });
-    });
-  })();
+(function(){
+var btns = Array.prototype.slice.call(document.querySelectorAll('.svc__btn'));
+function show(active){
+btns.forEach(function(b){
+var panel = document.getElementById(b.dataset.panel);
+var on = (b === active);
+b.setAttribute('aria-selected', on ? 'true' : 'false');
+if (panel) panel.hidden = !on;
+});
+}
+btns.forEach(function(b){
+b.addEventListener('click', function(){ show(b); });
+b.addEventListener('mouseenter', function(){ show(b); });
+});
+})();
 </script>
