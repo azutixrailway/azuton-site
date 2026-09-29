@@ -16,7 +16,6 @@ console.log(`🔍 DEBUG BUILD.JS`);
 console.log(`__dirname = ${__dirname}`);
 console.log(`SRC_DIR = ${SRC_DIR}`);
 console.log(`OUT_DIR = ${OUT_DIR}`);
-console.log(`PAGES_FILE = ${PAGES_FILE}`);
 
 // SEO metadata per page
 const META = {
@@ -80,6 +79,29 @@ const injectMeta = (html, title, description) => {
   return result;
 };
 
+const copyFolderSync = (src, dest) => {
+  if (!fs.existsSync(src)) {
+    console.warn(`Folder not found: ${src}`);
+    return;
+  }
+  
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+
+  const files = fs.readdirSync(src);
+  files.forEach(file => {
+    const srcPath = path.join(src, file);
+    const destPath = path.join(dest, file);
+    
+    if (fs.statSync(srcPath).isDirectory()) {
+      copyFolderSync(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  });
+};
+
 const build = () => {
   const pages = JSON.parse(fs.readFileSync(PAGES_FILE, 'utf8'));
 
@@ -89,7 +111,10 @@ const build = () => {
     fs.mkdirSync(OUT_DIR, { recursive: true });
   }
 
-  console.log(`OUT_DIR exists? ${fs.existsSync(OUT_DIR)}`);
+  console.log(`✓ Copying CSS and JS folders...`);
+  copyFolderSync(path.join(SRC_DIR, 'css'), path.join(OUT_DIR, 'css'));
+  copyFolderSync(path.join(SRC_DIR, 'js'), path.join(OUT_DIR, 'js'));
+  console.log(`✓ CSS and JS copied`);
 
   pages.forEach((page) => {
     const pagePath = path.join(SRC_DIR, 'pages', `${page.file}.html`);
@@ -124,16 +149,16 @@ const build = () => {
       // Cria o arquivo HTML com o slug como nome
       const outPath = path.join(langDir, `${slug}.html`);
       fs.writeFileSync(outPath, html, 'utf8');
-      console.log(`✓ Created: ${outPath.replace(OUT_DIR, '/dist')}`);
     });
   });
 
   // Count pages and verify
   const htmlFiles = fs.readdirSync(OUT_DIR, { recursive: true }).filter(f => f.endsWith('.html'));
   console.log(`✓ Build complete: ${htmlFiles.length} pages generated`);
-  console.log(`Files in OUT_DIR: ${htmlFiles.join(', ')}`);
-  console.log(`OUT_DIR still exists? ${fs.existsSync(OUT_DIR)}`);
+  console.log(`OUT_DIR exists? ${fs.existsSync(OUT_DIR)}`);
   console.log(`index.html exists? ${fs.existsSync(path.join(OUT_DIR, 'index.html'))}`);
+  console.log(`css folder exists? ${fs.existsSync(path.join(OUT_DIR, 'css'))}`);
+  console.log(`js folder exists? ${fs.existsSync(path.join(OUT_DIR, 'js'))}`);
 };
 
 build();
