@@ -112,7 +112,7 @@ const build = () => {
   }
 
   console.log(`✓ Copying CSS and JS folders...`);
-  copyFolderSync(path.join(SRC_DIR, 'css'), path.join(OUT_DIR, 'css'));
+  copyFolderSync(path.join(SRC_DIR, 'styles'), path.join(OUT_DIR, 'css'));
   copyFolderSync(path.join(SRC_DIR, 'js'), path.join(OUT_DIR, 'js'));
   console.log(`✓ CSS and JS copied`);
 
