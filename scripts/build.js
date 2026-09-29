@@ -99,11 +99,17 @@ const build = () => {
     }
 
     const baseHtml = fs.readFileSync(pagePath, 'utf8');
-    const slug = page.slug;
-    const meta = META[slug] || META.home;
+    let slug = page.slug;
+
+    // FIX: Se slug for vazia ou "home", trata como index
+    if (!slug || slug === 'home') {
+      slug = 'index';
+    }
+
+    const meta = META[page.slug] || META.home;
 
     LANGUAGES.forEach((lang) => {
-      const i18n = slug === 'blog' ? loadBlogI18n(lang) : loadI18n(lang);
+      const i18n = page.slug === 'blog' ? loadBlogI18n(lang) : loadI18n(lang);
       let html = injectI18n(baseHtml, i18n);
       
       const [title, description] = meta[lang];
@@ -118,6 +124,7 @@ const build = () => {
       // Cria o arquivo HTML com o slug como nome
       const outPath = path.join(langDir, `${slug}.html`);
       fs.writeFileSync(outPath, html, 'utf8');
+      console.log(`✓ Created: ${outPath.replace(OUT_DIR, '/dist')}`);
     });
   });
 
