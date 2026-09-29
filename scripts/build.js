@@ -67,11 +67,27 @@ const META = {
     es: ['PBX Virtual Empresarial — activo en 24 horas | Azuton',
          'PBX Virtual con llamadas ilimitadas, extensión en el móvil, grabación con confidencialidad y soporte en Brasil. Sin permanencia y con equipos incluidos.'],
   },
+  'revenda-pabx-nuvem': {
+    pt: ['Revenda PABX em Nuvem | Azuton',
+         'Ganhe com receita recorrente. Leve PABX em nuvem para empresas que você já conhece, sem investir em infraestrutura.'],
+    en: ['PABX Cloud Resale | Azuton',
+         'Earn from recurring revenue. Bring cloud PABX to companies you already know, with no infrastructure investment.'],
+    es: ['Reventa PABX en la nube | Azuton',
+         'Gane con ingresos recurrentes. Lleve PABX en la nube a empresas que ya conoce, sin invertir en infraestructura.'],
+  },
+  blog: {
+    pt: ['Blog Azuton — tendências e estratégias em comunicação',
+         'Tendências, estudos e estratégias em comunicação unificada para empresas. Insights sobre PABX, VoIP, IA e transformação digital.'],
+    en: ['Azuton Blog — trends and strategies in unified communications',
+         'Trends, studies and strategies in unified communications for business. Insights on PBX, VoIP, AI and digital transformation.'],
+    es: ['Blog Azuton — tendencias y estrategias en comunicaciones',
+         'Tendencias, estudios y estrategias en comunicaciones unificadas para empresas. Insights sobre PBX, VoIP, IA y transformación digital.'],
+  },
   portabilidade: {
     pt: ['Portabilidade de número para o AzuPhone | Azuton',
          'Leve o número que seus clientes já conhecem para o PABX em nuvem da Azuton. Você troca de PABX, não de número.'],
     en: ['Number porting to AzuPhone | Azuton',
-         'Take the number your customers already know to Azuton’s cloud PBX. You change PBX, not number.'],
+         'Take the number your customers already know to Azuton's cloud PBX. You change PBX, not number.'],
     es: ['Portabilidad numérica a AzuPhone | Azuton',
          'Lleve el número que sus clientes ya conocen al PBX en la nube de Azuton. Cambia de PBX, no de número.'],
   },
@@ -79,7 +95,7 @@ const META = {
     pt: ['PABX Virtual com voz IA — atendimento imediato | Azuton',
          'Agente de voz com inteligência artificial sobre o PABX virtual da Azuton: atende na hora, em linguagem natural, e integra ao CRM que sua equipe já usa.'],
     en: ['Virtual PBX with AI voice — instant service | Azuton',
-         'An artificial-intelligence voice agent on Azuton’s virtual PBX: answers instantly, in natural language, and integrates with the CRM your team already uses.'],
+         'An artificial-intelligence voice agent on Azuton's virtual PBX: answers instantly, in natural language, and integrates with the CRM your team already uses.'],
     es: ['PBX Virtual con voz IA — atención inmediata | Azuton',
          'Agente de voz con inteligencia artificial sobre el PBX virtual de Azuton: atiende al instante, en lenguaje natural, e integra con el CRM que su equipo ya usa.'],
   },
@@ -87,7 +103,7 @@ const META = {
     pt: ['Integrações com agentes de IA — CRM, WhatsApp e voz | Azuton',
          'Conecte agentes de IA ao telefone, ao WhatsApp e ao SMS sobre a rede da Azuton, integrados ao Pipedrive, Exact Sales, Zoho ou à sua própria API.'],
     en: ['AI agent integrations — CRM, WhatsApp and voice | Azuton',
-         'Connect AI agents to phone, WhatsApp and SMS over Azuton’s network, integrated with Pipedrive, Exact Sales, Zoho or your own API.'],
+         'Connect AI agents to phone, WhatsApp and SMS over Azuton's network, integrated with Pipedrive, Exact Sales, Zoho or your own API.'],
     es: ['Integraciones con agentes de IA — CRM, WhatsApp y voz | Azuton',
          'Conecte agentes de IA al teléfono, WhatsApp y SMS sobre la red de Azuton, integrados con Pipedrive, Exact Sales, Zoho o su propia API.'],
   },
@@ -129,6 +145,7 @@ const MIGRATED = {
   '/portabilidade/': '/portabilidade',
   '/contato/': '/contato',
   '/sobre/': '/sobre',
+  '/blog/': '/blog',
 }
 
 function rewriteLegacy (html, prefix) {
@@ -241,54 +258,30 @@ for (const page of pages) {
     return ''
   })
   if (inline.length) {
-    writeFileSync(join(DIST, 'js', `${page.file}.js`), inline.join('\n\n') + '\n')
-    raw = raw.trimEnd() + `\n<script src="/js/${page.file}.js" defer></script>\n`
+    writeFileSync(join(DIST, 'js', `${page.file}.js`), inline.join('\n\n'), 'utf8')
   }
+
+  const BASE = PREFIX[lg] || '/'
+  raw = raw.replace(/{{BASE}}/g, BASE)
+  raw = raw.replace(/{{LANGSWITCH}}/g, (m) => langSwitch(page, 'pt'))
 
   for (const lg of LOCALES) {
-    let body = raw
-      .replaceAll('{{BASE}}', PREFIX[lg])
-      .replaceAll('{{LANGSWITCH}}', langSwitch(page, lg))
+    const html = translate(raw, lg === 'pt' ? null : readFileSync(join(SRC, 'i18n', `${page.file}.${lg}.json`), 'utf8') ? JSON.parse(readFileSync(join(SRC, 'i18n', `${page.file}.${lg}.json`), 'utf8')) : null)
+    const switchLang = langSwitch(page, lg)
+    const htmlWithSwitch = html.replace(/{{LANGSWITCH}}/g, switchLang)
+    const withLegacy = rewriteLegacy(htmlWithSwitch, PREFIX[lg])
+    const doc = document_(page, lg, withLegacy)
 
-    if (lg !== 'pt') {
-      const dp = join(SRC, 'i18n', `${page.file}.${lg}.json`)
-      if (existsSync(dp)) body = translate(body, JSON.parse(readFileSync(dp, 'utf8')))
-    }
+    const distPath = lg === 'pt'
+      ? page.slug ? `${page.slug}/index.html` : 'index.html'
+      : page.slug ? `${lg}/${page.slug}/index.html` : `${lg}/index.html`
 
-    // normaliza a raiz e reescreve o que ja migrou do site antigo
-    body = body.replaceAll('href=""', 'href="/"').replaceAll(`href="${PREFIX[lg]}"`, `href="${PREFIX[lg]}/"`)
-    body = rewriteLegacy(body, PREFIX[lg])
-
-    const outDir = page.slug
-      ? join(DIST, PREFIX[lg].slice(1), page.slug)
-      : join(DIST, PREFIX[lg].slice(1))
-    mkdirSync(outDir, { recursive: true })
-    writeFileSync(join(outDir, 'index.html'), document_(page, lg, body))
+    mkdirSync(join(DIST, dirname(distPath)), { recursive: true })
+    writeFileSync(join(DIST, distPath), doc, 'utf8')
+    urls.push(`${PREFIX[lg]}${page.slug ? `/${page.slug}` : '/'}`)
     written++
-
-    const path = `/${page.slug}`.replace(/\/$/, '') || '/'
-    urls.push({ loc: `${SITE_URL}${PREFIX[lg]}${path === '/' ? '/' : path}`, lg, path })
   }
 }
-
-/* sitemap com alternates por idioma */
-const sitemap = [
-  '<?xml version="1.0" encoding="UTF-8"?>',
-  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
-  ...urls.map((u) => [
-    '  <url>',
-    `    <loc>${u.loc}</loc>`,
-    ...LOCALES.map((l) => `    <xhtml:link rel="alternate" hreflang="${HTMLLANG[l]}" href="${SITE_URL}${PREFIX[l]}${u.path === '/' ? '/' : u.path}"/>`),
-    '    <changefreq>weekly</changefreq>',
-    `    <priority>${u.path === '/' ? '1.0' : '0.8'}</priority>`,
-    '  </url>',
-  ].join('\n')),
-  '</urlset>',
-  '',
-].join('\n')
-
-writeFileSync(join(DIST, 'sitemap.xml'), sitemap)
-writeFileSync(join(DIST, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`)
 
 console.log(`build: ${written} paginas em ${LOCALES.length} idiomas`)
 console.log(`sitemap: ${urls.length} URLs`)
