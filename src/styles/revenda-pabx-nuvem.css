@@ -1,0 +1,217 @@
+/* Hero revenda — design premium com split e form card em turquesa */
+
+.hero-rev {
+  background: linear-gradient(135deg, #f8fbfd 0%, #f1f9fb 100%);
+  padding: 6rem 0;
+  border-bottom: 1px solid var(--field);
+}
+
+.hero-rev__in {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.hero-rev__text {
+  padding-right: 2rem;
+}
+
+.hero-rev__text .label {
+  font-size: 0.875rem;
+  color: var(--blue);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.hero-rev__text h1 {
+  font-size: 2.75rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 1.5rem 0 1rem;
+  color: var(--deep);
+}
+
+.hero-rev__deck {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--teal);
+  margin-bottom: 1.5rem;
+}
+
+.hero-rev__body {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--deep);
+  margin-bottom: 2rem;
+}
+
+.hero-rev__badges {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 2.5rem 0;
+}
+
+.badge {
+  background: white;
+  border: 1px solid var(--field);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.9375rem;
+  color: var(--deep);
+}
+
+.badge strong {
+  display: block;
+  font-size: 1.5rem;
+  color: var(--teal);
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.hero-rev__text .btns {
+  margin-top: 2rem;
+}
+
+.btn--teal {
+  background-color: var(--teal);
+  color: white;
+  border-color: var(--teal);
+}
+
+.btn--teal:hover {
+  background-color: #2cb5a4;
+  border-color: #2cb5a4;
+}
+
+/* Form card — premium styling */
+
+.form-card {
+  background: white;
+  border: 1px solid var(--field);
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 24px rgba(52, 114, 212, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.form-card:hover {
+  box-shadow: 0 12px 32px rgba(52, 114, 212, 0.12);
+}
+
+.form-card__head {
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--teal);
+  padding-bottom: 1.5rem;
+}
+
+.form-card__head h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--deep);
+  margin: 0 0 0.5rem 0;
+}
+
+.form-card__head p {
+  font-size: 0.9375rem;
+  color: #666;
+  margin: 0;
+}
+
+.form--compact {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.form--compact .form__row {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.form--compact .form__row:last-of-type {
+  margin-bottom: 1.5rem;
+}
+
+.form--compact input,
+.form--compact textarea {
+  width: 100%;
+  padding: 0.875rem;
+  font-size: 1rem;
+  border: 1px solid var(--field);
+  border-radius: 6px;
+  background: var(--white);
+  color: var(--deep);
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.form--compact input::placeholder {
+  color: #999;
+}
+
+.form--compact input:focus,
+.form--compact textarea:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(53, 221, 197, 0.1);
+  background: #fafbfc;
+}
+
+.form--compact .btn {
+  margin-top: 0.5rem;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .hero-rev {
+    padding: 4rem 0;
+  }
+
+  .hero-rev__in {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .hero-rev__text {
+    padding-right: 0;
+  }
+
+  .hero-rev__text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-rev__deck {
+    font-size: 1.125rem;
+  }
+
+  .hero-rev__body {
+    font-size: 1rem;
+  }
+
+  .hero-rev__badges {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .badge {
+    padding: 0.875rem;
+    font-size: 0.875rem;
+  }
+
+  .badge strong {
+    font-size: 1.25rem;
+  }
+
+  .form-card {
+    padding: 2rem;
+  }
+
+  .form-card__head h2 {
+    font-size: 1.25rem;
+  }
+}
