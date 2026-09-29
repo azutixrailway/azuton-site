@@ -17,6 +17,14 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const DIST = join(ROOT, 'dist')
 const PORT = process.env.PORT || 3000
 
+console.log(`🔍 DEBUG SERVER.INDEX.JS`)
+console.log(`ROOT = ${ROOT}`)
+console.log(`DIST = ${DIST}`)
+console.log(`PORT = ${PORT}`)
+console.log(`Checking for: ${join(DIST, 'index.html')}`)
+console.log(`DIST exists? ${existsSync(DIST)}`)
+console.log(`index.html exists? ${existsSync(join(DIST, 'index.html'))}`)
+
 if (!existsSync(join(DIST, 'index.html'))) {
   console.error('dist/ nao encontrado. Rode "npm run build" antes de "npm start".')
   process.exit(1)
