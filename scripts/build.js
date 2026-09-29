@@ -112,6 +112,7 @@ return `<!DOCTYPE html>
 <meta name="description" content="${description}">
 <title>${title}</title>
 <link rel="stylesheet" href="/css/core.css">
+<link rel="stylesheet" href="/css/forms.css">
 <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
