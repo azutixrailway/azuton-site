@@ -1,0 +1,20 @@
+/* Seletor de idioma com bandeiras (o build injeta o markup em {{LANGSWITCH}}) */
+.lang__set--flags{display:inline-flex;align-items:center;gap:2px;padding:3px;border:1px solid var(--rule);border-radius:999px;background:var(--paper);}
+.lang__set--flags .lang__o{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:26px;padding:0;border:0;border-radius:999px;
+  background:transparent;opacity:.5;filter:saturate(.75);
+  transition:opacity .16s ease,filter .16s ease,background .16s ease,transform .16s ease;
+}
+.lang__set--flags .lang__o:hover,.lang__set--flags .lang__o:focus-visible{opacity:1;filter:none;background:var(--paper-2);transform:translateY(-1px);}
+.lang__set--flags .lang__o[aria-current="true"],.lang__set--flags .lang__o[aria-current="true"]:hover{
+  opacity:1;filter:none;background:var(--ink);transform:none;cursor:default;
+}
+.lang__set--flags .flag{width:22px;height:15px;display:block;border-radius:2px;box-shadow:0 0 0 1px rgba(6,42,95,.12);}
+.lang__set--flags .lang__o[aria-current="true"] .flag{box-shadow:0 0 0 1px rgba(255,255,255,.35);}
+/* o globo ao lado virou redundante com as bandeiras */
+.lang .lang__i{display:none;}
+@media (max-width:560px){
+  .lang__set--flags .lang__o{width:30px;height:24px;}
+  .lang__set--flags .flag{width:19px;height:13px;}
+}

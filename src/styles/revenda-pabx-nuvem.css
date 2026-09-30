@@ -3,7 +3,7 @@
 .hero-rev {
   background: linear-gradient(135deg, #f8fbfd 0%, #f1f9fb 100%);
   padding: 6rem 0;
-  border-bottom: 1px solid var(--field);
+  border-bottom: 1px solid var(--rule);
 }
 
 .hero-rev__in {
@@ -56,7 +56,7 @@
 
 .badge {
   background: white;
-  border: 1px solid var(--field);
+  border: 1px solid var(--rule);
   border-radius: 8px;
   padding: 1rem;
   text-align: center;
@@ -91,7 +91,7 @@
 
 .form-card {
   background: white;
-  border: 1px solid var(--field);
+  border: 1px solid var(--rule);
   border-radius: 12px;
   padding: 2.5rem;
   box-shadow: 0 8px 24px rgba(52, 114, 212, 0.08);
@@ -141,7 +141,7 @@
   width: 100%;
   padding: 0.875rem;
   font-size: 1rem;
-  border: 1px solid var(--field);
+  border: 1px solid var(--rule);
   border-radius: 6px;
   background: var(--white);
   color: var(--deep);

@@ -1,284 +1,103 @@
-/* Forms — Padronização global */
+/**
+ * Formularios — padrao unico para o site inteiro.
+ *
+ * Carregado depois do CSS de cada pagina, entao o que esta aqui vence as
+ * regras locais (.qf__f input, .form input etc.). Dois contextos:
+ *   - claro: hero, cards, faixas brancas       -> form.form
+ *   - escuro: faixa .qf (marinho) e .cta        -> .qf form.form, .cta form.form
+ */
 
-/* FORM CONTAINER */
-.form {
-display: flex;
-flex-direction: column;
-gap: 0;
+/* ---------- estrutura ---------- */
+form.form{display:flex;flex-direction:column;gap:18px;width:100%;}
+form.form .frow,form.form .form__row{display:flex;flex-direction:column;gap:8px;min-width:0;}
+form.form .form__grid{display:grid;grid-template-columns:1fr;gap:18px;}
+@media (min-width:620px){ form.form .form__grid--2{grid-template-columns:repeat(2,1fr);} }
+
+/* ---------- rotulos ---------- */
+form.form label{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.6875rem;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);line-height:1.3;
 }
+form.form label .req{color:var(--teal-text);margin-left:2px;}
 
-.frow {
-display: flex;
-flex-direction: column;
-gap: 0.5rem;
-margin-bottom: 1.25rem;
+/* ---------- campos ---------- */
+form.form input:where(:not([type="checkbox"]):not([type="radio"])),
+form.form select,
+form.form textarea{
+  width:100%;box-sizing:border-box;
+  font-family:inherit;font-size:1rem;line-height:1.4;color:var(--ink);
+  background:var(--paper);border:1px solid var(--rule);border-radius:8px;
+  padding:13px 15px;min-height:50px;
+  transition:border-color .16s ease,box-shadow .16s ease,background .16s ease;
+  -webkit-appearance:none;appearance:none;
 }
-
-.frow.frow--inline {
-flex-direction: row;
-align-items: center;
-gap: 1rem;
+form.form textarea{min-height:130px;resize:vertical;}
+form.form input::placeholder,form.form textarea::placeholder{color:var(--ink-2);opacity:.55;}
+form.form input:hover,form.form select:hover,form.form textarea:hover{border-color:var(--ink-2);}
+form.form input:focus,form.form select:focus,form.form textarea:focus{
+  outline:none;border-color:var(--teal-ink);
+  box-shadow:0 0 0 3px var(--teal-wash-rule);
 }
-
-.frow.frow--inline label {
-min-width: 150px;
+form.form input:user-invalid,form.form textarea:user-invalid,form.form select:user-invalid{border-color:#C2410C;}
+form.form input:-webkit-autofill,form.form textarea:-webkit-autofill{
+  -webkit-text-fill-color:var(--ink);box-shadow:0 0 0 1000px var(--paper) inset;
 }
-
-.frow.frow--cols-2 {
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 1.5rem;
+form.form select{
+  cursor:pointer;padding-right:44px;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%235A6478' stroke-width='1.6'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:16px;
 }
+form.form input[type="checkbox"],form.form input[type="radio"]{width:18px;height:18px;accent-color:var(--teal-ink);cursor:pointer;}
 
-/* LABELS */
-.frow label {
-font-size: 0.9375rem;
-font-weight: 600;
-color: var(--deep);
-display: flex;
-align-items: center;
-gap: 0.35rem;
+/* ---------- grupos numerados (portabilidade) ---------- */
+form.form .fset{
+  border:1px solid var(--rule);border-radius:12px;padding:clamp(18px,2.4vw,28px);margin:0;
+  background:var(--paper);display:flex;flex-direction:column;gap:16px;
 }
-
-.req {
-color: #e74c3c;
-font-weight: 700;
+form.form .fset legend,form.form .fset__head{
+  border:0;display:inline-flex;align-items:center;gap:10px;padding:0 8px;margin-left:-8px;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.75rem;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--ink);
 }
-
-/* INPUT & TEXTAREA */
-.frow input,
-.frow textarea,
-.frow select {
-width: 100%;
-padding: 0.875rem 1rem;
-font-size: 1rem;
-border: 1px solid var(--field);
-border-radius: 8px;
-background: white;
-color: var(--deep);
-font-family: inherit;
-transition: all 0.2s ease;
-}
-
-.frow input::placeholder,
-.frow textarea::placeholder {
-color: #ccc;
-}
-
-.frow input:focus,
-.frow textarea:focus,
-.frow select:focus {
-outline: none;
-border-color: var(--teal);
-box-shadow: 0 0 0 3px rgba(53, 221, 197, 0.1);
-background: #fafbfc;
+form.form .fset__n{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:28px;height:28px;padding:0 6px;border-radius:999px;
+  background:var(--teal);color:var(--on-teal);font-size:.6875rem;
 }
 
-.frow textarea {
-min-height: 120px;
-resize: vertical;
-}
+/* ---------- acoes e notas ---------- */
+form.form .btn{min-height:52px;border-radius:8px;}
+form.form .btns,form.form .qf__go,form.form .form__actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center;}
+form.form .form__note,form.form .qf__note{margin:0;font-size:.8125rem;line-height:1.5;color:var(--ink-2);}
+form.form .form__status{border-radius:8px;}
+@media (max-width:560px){ form.form .btn{width:100%;justify-content:center;gap:12px;} }
 
-/* SELECT */
-.frow select {
-cursor: pointer;
-appearance: none;
-background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233472D4' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-background-repeat: no-repeat;
-background-position: right 0.75rem center;
-background-size: 20px;
-padding-right: 2.75rem;
+/* ---------- card branco (revenda, contato) ---------- */
+.form-card{
+  background:var(--paper);border:1px solid var(--rule);border-radius:14px;
+  padding:clamp(22px,3vw,36px);box-shadow:0 10px 30px rgba(6,42,95,.06);
 }
+.form-card__head{margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--rule);}
+.form-card__head h2{font-size:1.375rem;font-weight:600;letter-spacing:-.018em;color:var(--ink);margin:0 0 6px;}
+.form-card__head p{font-size:.9375rem;color:var(--ink-2);margin:0;}
 
-/* CHECKBOX & RADIO */
-.frow input[type="checkbox"],
-.frow input[type="radio"] {
-width: auto;
-margin: 0;
-padding: 0;
-accent-color: var(--teal);
-cursor: pointer;
+/* ---------- contexto escuro (faixa marinho .qf e .cta) ---------- */
+.qf form.form label,.cta form.form label{color:var(--field-ink);opacity:.82;}
+.qf form.form label .req,.cta form.form label .req{color:var(--field-accent);opacity:1;}
+.qf form.form input,.qf form.form select,.qf form.form textarea,
+.cta form.form input,.cta form.form select,.cta form.form textarea{
+  color:var(--field-ink);background:rgba(255,255,255,.06);border-color:var(--field-rule);
 }
+.qf form.form input::placeholder,.cta form.form input::placeholder{color:var(--field-ink);opacity:.45;}
+.qf form.form input:hover,.cta form.form input:hover{border-color:rgba(255,255,255,.4);}
+.qf form.form input:focus,.qf form.form select:focus,.qf form.form textarea:focus,
+.cta form.form input:focus,.cta form.form select:focus,.cta form.form textarea:focus{
+  border-color:var(--field-accent);box-shadow:0 0 0 3px rgba(95,231,210,.22);background:rgba(255,255,255,.1);
+}
+.qf form.form input:-webkit-autofill{-webkit-text-fill-color:var(--field-ink);box-shadow:0 0 0 1000px #0B2A55 inset;}
+.qf form.form .qf__note,.qf form.form .form__note,.cta form.form .form__note{color:var(--field-ink);opacity:.7;}
 
-.frow input[type="checkbox"] + label,
-.frow input[type="radio"] + label {
-display: flex;
-align-items: center;
-gap: 0.75rem;
-margin: 0;
-cursor: pointer;
-font-weight: 400;
-}
-
-/* FORM SECTIONS */
-.form-section {
-border-bottom: 1px solid var(--field);
-padding-bottom: 2rem;
-margin-bottom: 2rem;
-}
-
-.form-section:last-child {
-border-bottom: none;
-}
-
-.form-section h3 {
-font-size: 1.125rem;
-font-weight: 700;
-color: var(--deep);
-margin: 0 0 1.5rem;
-}
-
-/* FORM ACTIONS */
-.form-actions {
-display: flex;
-gap: 1rem;
-justify-content: flex-end;
-align-items: center;
-margin-top: 2rem;
-padding-top: 2rem;
-border-top: 1px solid var(--field);
-}
-
-.form-actions .btn {
-padding: 0.875rem 2rem;
-}
-
-.form-actions .btn--secondary {
-background: #f5f5f5;
-color: var(--deep);
-border: 1px solid var(--field);
-}
-
-.form-actions .btn--secondary:hover {
-background: #efefef;
-}
-
-/* FORM GROUPS */
-.form-group {
-display: flex;
-flex-direction: column;
-gap: 0.5rem;
-}
-
-.form-group--inline {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-gap: 1.5rem;
-}
-
-/* FORM STATUS MESSAGES */
-.form-message {
-padding: 1rem;
-border-radius: 8px;
-font-size: 0.9375rem;
-margin-bottom: 1.5rem;
-display: flex;
-align-items: center;
-gap: 0.75rem;
-}
-
-.form-message.success {
-background: #d4edda;
-color: #155724;
-border: 1px solid #c3e6cb;
-}
-
-.form-message.error {
-background: #f8d7da;
-color: #721c24;
-border: 1px solid #f5c6cb;
-}
-
-.form-message.info {
-background: #d1ecf1;
-color: #0c5460;
-border: 1px solid #bee5eb;
-}
-
-/* BUTTON GROUP */
-.form-btn-group {
-display: flex;
-gap: 1rem;
-flex-wrap: wrap;
-}
-
-.form-btn-group .btn {
-flex: 1;
-min-width: 150px;
-}
-
-/* HELPER TEXT */
-.form-help {
-font-size: 0.8125rem;
-color: #999;
-margin-top: 0.35rem;
-display: block;
-}
-
-.form-help.error {
-color: #e74c3c;
-}
-
-/* FORM CARD (para formulários em destaque) */
-.form-card {
-background: white;
-border: 1px solid var(--field);
-border-radius: 12px;
-padding: 2.5rem;
-}
-
-.form-card h2 {
-font-size: 1.5rem;
-font-weight: 700;
-color: var(--deep);
-margin: 0 0 0.5rem;
-}
-
-.form-card p {
-font-size: 1rem;
-color: #666;
-margin: 0 0 2rem;
-}
-
-/* RESPONSIVE */
-@media (max-width: 768px) {
-.frow.frow--inline {
-flex-direction: column;
-align-items: flex-start;
-}
-
-.frow.frow--inline label {
-min-width: auto;
-}
-
-.frow.frow--cols-2 {
-grid-template-columns: 1fr;
-gap: 1rem;
-}
-
-.form-actions {
-flex-direction: column;
-justify-content: flex-start;
-}
-
-.form-actions .btn {
-width: 100%;
-}
-
-.form-group--inline {
-grid-template-columns: 1fr;
-gap: 1rem;
-}
-
-.form-card {
-padding: 2rem;
-}
-
-.form-card h2 {
-font-size: 1.25rem;
-}
-
-.form-btn-group .btn {
-min-width: auto;
-}
-}
+/* formulario rapido: grade em 2 e 4 colunas, como o desenho original */
+.qf form.qf__f{display:grid;grid-template-columns:1fr;gap:16px;}
+@media (min-width:640px){ .qf form.qf__f{grid-template-columns:repeat(2,1fr);} }
+@media (min-width:1060px){ .qf form.qf__f{grid-template-columns:repeat(4,1fr);} .qf form.qf__f .qf__go{grid-column:1/-1;} }

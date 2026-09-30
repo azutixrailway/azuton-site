@@ -23,8 +23,10 @@ z-index: -1;
 .hero-blog__in {
 position: relative;
 z-index: 1;
-max-width: 720px;
+width: 100%;
 }
+.hero-blog__in h1, .hero-blog__deck { max-width: 18ch; }
+.hero-blog__deck { max-width: 52ch; }
 
 .hero-blog__in .label--white {
 color: white;
@@ -73,7 +75,7 @@ gap: 2.5rem;
 background: linear-gradient(135deg, #f8fbfd 0%, #f1f9fb 100%);
 padding: 3rem;
 border-radius: 16px;
-border: 1px solid var(--field);
+border: 1px solid var(--rule);
 transition: all 0.3s ease;
 position: relative;
 }
@@ -162,7 +164,7 @@ flex-wrap: wrap;
 padding: 0.75rem 1.5rem;
 font-size: 0.9375rem;
 font-weight: 600;
-border: 1px solid var(--field);
+border: 1px solid var(--rule);
 background: white;
 color: var(--ink-2);
 border-radius: 8px;
@@ -190,7 +192,7 @@ gap: 2rem;
 
 .post-card {
 background: white;
-border: 1px solid var(--field);
+border: 1px solid var(--rule);
 border-radius: 12px;
 overflow: hidden;
 transition: all 0.3s ease;
