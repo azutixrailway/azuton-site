@@ -1,201 +1,320 @@
-import fs from 'fs';
-import path from 'path';
+/**
+ * Gera dist/ com as tres versoes de idioma de cada pagina.
+ *
+ *   dist/index.html            -> portugues (raiz)
+ *   dist/en/index.html         -> ingles
+ *   dist/es/index.html         -> espanhol
+ *
+ * A traducao e assada no HTML aqui, no build. Nada de troca de idioma por
+ * JavaScript: cada idioma tem URL propria, com canonical e hreflang, que e o
+ * que o Google e as buscas em IA precisam para indexar os tres.
+ */
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync, rmSync, copyFileSync } from 'node:fs'
+import { join, dirname } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { parse } from 'node-html-parser'
 
-const __filename = new URL(import.meta.url).pathname;
-const __dirname = path.dirname(__filename);
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
+const SRC = join(ROOT, 'src')
+const DIST = join(ROOT, 'dist')
 
-const SRC_DIR = path.join(__dirname, '..', 'src');
-const OUT_DIR = path.join(__dirname, '..', 'dist');
-const PAGES_FILE = path.join(SRC_DIR, 'pages.json');
-const I18N_DIR = path.join(SRC_DIR, 'i18n');
+const SITE_URL = (process.env.SITE_URL || 'https://azuton.com').replace(/\/+$/, '')
+const LOCALES = ['pt', 'en', 'es']
+const HTMLLANG = { pt: 'pt-BR', en: 'en', es: 'es' }
+const PREFIX = { pt: '', en: '/en', es: '/es' }
 
-const LANGUAGES = ['pt', 'en', 'es'];
-const DEFAULT_LANG = 'pt';
+const pages = JSON.parse(readFileSync(join(SRC, 'pages.json'), 'utf8'))
 
-console.log(`🔍 DEBUG BUILD.JS`);
-console.log(`__dirname = ${__dirname}`);
-console.log(`SRC_DIR = ${SRC_DIR}`);
-console.log(`OUT_DIR = ${OUT_DIR}`);
-
-// SEO metadata per page
+/* ---------- metadados por pagina e por idioma ---------- */
 const META = {
-home: {
-pt: ['Azuton | Comunicação Unificada em Nuvem', 'Soluções de PABX Virtual, Voz IA e Integrações para empresas brasileiras. Tecnologia em nuvem com segurança.'],
-en: ['Azuton | Unified Communications in the Cloud', 'Virtual PBX, AI Voice and Integration solutions for Brazilian companies. Cloud technology with security.'],
-es: ['Azuton | Comunicaciones Unificadas en la Nube', 'Soluciones de PBX Virtual, Voz IA e Integraciones para empresas brasileñas. Tecnología en nube con seguridad.'],
-},
-'revenda-pabx-nuvem': {
-pt: ['PABX em Nuvem para Revendedores | Azuton', 'Plataforma de PABX Virtual escalável para revendedores. Comissões competitivas, suporte técnico e ferramentas de gestão.'],
-en: ['Cloud PBX for Resellers | Azuton', 'Scalable Virtual PBX platform for resellers. Competitive commissions, technical support and management tools.'],
-es: ['PBX en la Nube para Revendedores | Azuton', 'Plataforma de PBX Virtual escalable para revendedores. Comisiones competitivas, soporte técnico y herramientas de gestión.'],
-},
-blog: {
-pt: ['Blog Azuton — Tendências em Comunicação Unificada', 'Tendências, estudos e estratégias em comunicação unificada para empresas. Insights sobre PABX, VoIP e transformação digital.'],
-en: ['Azuton Blog — Trends in Unified Communications', 'Trends, studies and strategies in unified communications for business. Insights on PBX, VoIP and digital transformation.'],
-es: ['Blog Azuton — Tendencias en Comunicaciones Unificadas', 'Tendencias, estudios y estrategias en comunicaciones unificadas para empresas. Perspectivas sobre PBX, VoIP y transformación digital.'],
-},
-contato: {
-pt: ['Contato | Azuton', 'Entre em contato com a Azuton. Suporte ao cliente, informações sobre produtos e parcerias.'],
-en: ['Contact | Azuton', 'Get in touch with Azuton. Customer support, product information and partnerships.'],
-es: ['Contacto | Azuton', 'Ponte en contacto con Azuton. Soporte al cliente, información de productos y asociaciones.'],
-},
-};
-
-const loadI18n = (lang) => {
-const file = lang === DEFAULT_LANG ? 'index.json' : `index.${lang}.json`;
-const filePath = path.join(I18N_DIR, file);
-try {
-return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-} catch (err) {
-console.error(`Error loading i18n for ${lang}:`, err.message);
-return {};
+  index: {
+    pt: ['Azuton — Comunicação unificada, IoT e segurança digital',
+         'PABX em nuvem, agentes de voz com IA, link dedicado e IoT para empresas. Mais de dez anos habilitando operadoras e empresas no Brasil.'],
+    en: ['Azuton — Unified communications, IoT and digital security',
+         'Cloud PBX, AI voice agents, dedicated links and IoT for business. More than ten years enabling carriers and companies in Brazil.'],
+    es: ['Azuton — Comunicaciones unificadas, IoT y seguridad digital',
+         'PBX en la nube, agentes de voz con IA, enlaces dedicados e IoT para empresas. Más de diez años habilitando operadores y empresas en Brasil.'],
+  },
+  sobre: {
+    pt: ['Sobre a Azuton — habilitadora de telecomunicações',
+         'A Azuton é uma habilitadora (enabler) brasileira de telecom. Atacado mundial, operadoras de pequeno e médio porte no Brasil e agentes de voz com IA em produção há mais de um ano.'],
+    en: ['About Azuton — telecommunications enabler',
+         'Azuton is a Brazilian telecom enabler. Global wholesale, small and mid-sized carriers in Brazil, and AI voice agents in production for over a year.'],
+    es: ['Sobre Azuton — habilitador de telecomunicaciones',
+         'Azuton es un habilitador brasileño de telecom. Mayorista mundial, operadores pequeños y medianos en Brasil y agentes de voz con IA en producción desde hace más de un año.'],
+  },
+  solucoes: {
+    pt: ['Soluções Azuton — voz, conectividade, IoT e segurança',
+         'PABX em nuvem, voz com IA, integrações, link dedicado, IoT e segurança. E habilitação de operadoras de pequeno e médio porte.'],
+    en: ['Azuton Solutions — voice, connectivity, IoT and security',
+         'Cloud PBX, AI voice, integrations, dedicated links, IoT and security. Plus enablement for small and mid-sized carriers.'],
+    es: ['Soluciones Azuton — voz, conectividad, IoT y seguridad',
+         'PBX en la nube, voz con IA, integraciones, enlaces dedicados, IoT y seguridad. Y habilitación de operadores pequeños y medianos.'],
+  },
+  'azuphone-pabx-nuvem': {
+    pt: ['AzuPhone PABX Nuvem — PABX virtual em 24 horas | Azuton',
+         'PABX em nuvem, também chamado PABX virtual: ramal no escritório, no celular e na filial, no mesmo número. De 30% a 40% de economia e um Personal Tec dedicado.'],
+    en: ['AzuPhone Cloud PBX — virtual PBX live in 24 hours | Azuton',
+         'Cloud PBX, also called virtual PBX: your extension at the office, on your mobile and at the branch, on the same number. 30% to 40% savings and a dedicated Personal Tec.'],
+    es: ['AzuPhone PBX en la Nube — PBX virtual en 24 horas | Azuton',
+         'PBX en la nube, también llamado PBX virtual: extensión en la oficina, en el móvil y en la sucursal, con el mismo número. Del 30% al 40% de ahorro y un Personal Tec dedicado.'],
+  },
+  'pabx-virtual': {
+    pt: ['PABX Virtual Empresarial — ativo em 24 horas | Azuton',
+         'PABX Virtual com chamadas ilimitadas, ramal no celular, gravação com sigilo e suporte no Brasil. Sem prazo contratual e com aparelhos inclusos.'],
+    en: ['Virtual PBX for business — live in 24 hours | Azuton',
+         'Virtual PBX with unlimited calls, your extension on mobile, recording with strict access control and support in Brazil. No lock-in contract, handsets included.'],
+    es: ['PBX Virtual Empresarial — activo en 24 horas | Azuton',
+         'PBX Virtual con llamadas ilimitadas, extensión en el móvil, grabación con confidencialidad y soporte en Brasil. Sin permanencia y con equipos incluidos.'],
+  },
+  portabilidade: {
+    pt: ['Portabilidade de número para o AzuPhone | Azuton',
+         'Leve o número que seus clientes já conhecem para o PABX em nuvem da Azuton. Você troca de PABX, não de número.'],
+    en: ['Number porting to AzuPhone | Azuton',
+         'Take the number your customers already know to Azuton’s cloud PBX. You change PBX, not number.'],
+    es: ['Portabilidad numérica a AzuPhone | Azuton',
+         'Lleve el número que sus clientes ya conocen al PBX en la nube de Azuton. Cambia de PBX, no de número.'],
+  },
+  'pabx-voz-ia': {
+    pt: ['PABX Virtual com voz IA — atendimento imediato | Azuton',
+         'Agente de voz com inteligência artificial sobre o PABX virtual da Azuton: atende na hora, em linguagem natural, e integra ao CRM que sua equipe já usa.'],
+    en: ['Virtual PBX with AI voice — instant service | Azuton',
+         'An artificial-intelligence voice agent on Azuton’s virtual PBX: answers instantly, in natural language, and integrates with the CRM your team already uses.'],
+    es: ['PBX Virtual con voz IA — atención inmediata | Azuton',
+         'Agente de voz con inteligencia artificial sobre el PBX virtual de Azuton: atiende al instante, en lenguaje natural, e integra con el CRM que su equipo ya usa.'],
+  },
+  'integracoes-agentes-ia': {
+    pt: ['Integrações com agentes de IA — CRM, WhatsApp e voz | Azuton',
+         'Conecte agentes de IA ao telefone, ao WhatsApp e ao SMS sobre a rede da Azuton, integrados ao Pipedrive, Exact Sales, Zoho ou à sua própria API.'],
+    en: ['AI agent integrations — CRM, WhatsApp and voice | Azuton',
+         'Connect AI agents to phone, WhatsApp and SMS over Azuton’s network, integrated with Pipedrive, Exact Sales, Zoho or your own API.'],
+    es: ['Integraciones con agentes de IA — CRM, WhatsApp y voz | Azuton',
+         'Conecte agentes de IA al teléfono, WhatsApp y SMS sobre la red de Azuton, integrados con Pipedrive, Exact Sales, Zoho o su propia API.'],
+  },
+  downloads: {
+    pt: ['Downloads AzuPhone — aplicativo e instruções de configuração | Azuton',
+         'Baixe o aplicativo do AzuPhone e veja o passo a passo de configuração do PABX em nuvem. Suporte técnico no Brasil, de segunda a sexta.'],
+    en: ['AzuPhone downloads — app and setup instructions | Azuton',
+         'Download the AzuPhone app and follow the step-by-step setup for the cloud PBX. Technical support in Brazil, Monday to Friday.'],
+    es: ['Descargas AzuPhone — aplicación e instrucciones de configuración | Azuton',
+         'Descargue la aplicación de AzuPhone y siga el paso a paso de configuración del PBX en la nube. Soporte técnico en Brasil, de lunes a viernes.'],
+  },
+  'revenda-pabx-nuvem': {
+    pt: ['Revenda PABX em Nuvem — receita recorrente sem infraestrutura | Azuton',
+         'Programa de revenda e parcerias do AzuPhone: receita que se repete todo mês, ativação em 24 horas pela Azuton e suporte opcional. Sem estoque, sem equipe, sem servidor.'],
+    en: ['Resell Cloud PBX — recurring revenue with no infrastructure | Azuton',
+         'AzuPhone reseller and partner program: revenue that repeats every month, 24-hour activation by Azuton and optional support. No inventory, no staff, no servers.'],
+    es: ['Revenda PBX en la Nube — ingresos recurrentes sin infraestructura | Azuton',
+         'Programa de reventa y alianzas de AzuPhone: ingresos que se repiten cada mes, activación en 24 horas por Azuton y soporte opcional. Sin inventario, sin equipo, sin servidores.'],
+  },
+  blog: {
+    pt: ['Blog Azuton — tendências em comunicação unificada',
+         'Artigos, estudos e estratégias sobre PABX em nuvem, voz com IA, IoT e transformação digital para empresas brasileiras.'],
+    en: ['Azuton Blog — trends in unified communications',
+         'Articles, studies and strategies on cloud PBX, AI voice, IoT and digital transformation for business.'],
+    es: ['Blog Azuton — tendencias en comunicaciones unificadas',
+         'Artículos, estudios y estrategias sobre PBX en la nube, voz con IA, IoT y transformación digital para empresas.'],
+  },
+  contato: {
+    pt: ['Contato Azuton — fale com um especialista',
+         'Telefone, WhatsApp, e-mail e formulário. Orçamento do AzuPhone, portabilidade, agente de voz com IA, integrações e suporte.'],
+    en: ['Contact Azuton — talk to a specialist',
+         'Phone, WhatsApp, email and form. AzuPhone quotes, number porting, AI voice agent, integrations and support.'],
+    es: ['Contacto Azuton — hable con un especialista',
+         'Teléfono, WhatsApp, correo y formulario. Presupuesto de AzuPhone, portabilidad, agente de voz con IA, integraciones y soporte.'],
+  },
 }
-};
 
-const loadBlogI18n = (lang) => {
-const file = lang === DEFAULT_LANG ? 'blog.json' : `blog.${lang}.json`;
-const filePath = path.join(I18N_DIR, file);
-try {
-return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-} catch (err) {
-console.error(`Error loading blog i18n for ${lang}:`, err.message);
-return {};
-}
-};
+const SWITCH_LABEL = { pt: 'Idioma da página', en: 'Page language', es: 'Idioma de la página' }
 
-const injectI18n = (html, translations) => {
-let result = html;
-for (const [key, value] of Object.entries(translations.text || {})) {
-const placeholder = `{{${key}}}`;
-result = result.split(placeholder).join(value);
-}
-return result;
-};
+/* ---------- helpers ---------- */
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 
-const injectMeta = (html, title, description) => {
-let result = html;
-result = result.replace(/<title>.*?<\/title>/i, `<title>${title}</title>`);
-result = result.replace(/content="[^"]*"\s*name="description"/i, `content="${description}" name="description"`);
-return result;
-};
-
-const copyFolderSync = (src, dest) => {
-if (!fs.existsSync(src)) {
-console.warn(`Folder not found: ${src}`);
-return;
+/**
+ * Paginas do site antigo que ja existem aqui. As demais (link dedicado, IoT,
+ * blog, SMS) continuam apontando para LEGACY_BASE ate serem migradas — trocar
+ * essa variavel no dia da virada e o unico passo necessario.
+ */
+const LEGACY = (process.env.LEGACY_BASE || 'https://azuton.com').replace(/\/+$/, '')
+const MIGRATED = {
+  '/': '/',
+  '/azuphone/': '/azuphone-pabx-nuvem',
+  '/azuphone-pabx-nuvem/': '/azuphone-pabx-nuvem',
+  '/pabx%20virtual/': '/pabx-virtual',
+  '/pabx-virtual/': '/pabx-virtual',
+  '/portabilidade/': '/portabilidade',
+  '/contato/': '/contato',
+  '/sobre/': '/sobre',
+  '/blog/': '/blog',
 }
 
-if (!fs.existsSync(dest)) {
-fs.mkdirSync(dest, { recursive: true });
+function rewriteLegacy (html, prefix) {
+  return html.replace(/href="https:\/\/azuton\.com(\/[^"]*)?"/g, (m, path) => {
+    const p = path || '/'
+    const dest = MIGRATED[p]
+    if (dest === undefined) return `href="${LEGACY}${p}"`
+    return `href="${prefix}${dest === '/' ? '/' : dest}"`
+  })
 }
 
-const files = fs.readdirSync(src);
-files.forEach(file => {
-const srcPath = path.join(src, file);
-const destPath = path.join(dest, file);
-
-if (fs.statSync(srcPath).isDirectory()) {
-copyFolderSync(srcPath, destPath);
-} else {
-fs.copyFileSync(srcPath, destPath);
+/* bandeiras do seletor de idioma — 24x16, desenhadas em SVG para nao depender de imagem */
+const FLAG = {
+  pt: '<svg class="flag" viewBox="0 0 24 16" aria-hidden="true"><rect width="24" height="16" fill="#009C3B"/><path d="M12 2.2 21.6 8 12 13.8 2.4 8z" fill="#FFDF00"/><circle cx="12" cy="8" r="3.4" fill="#002776"/><path d="M8.9 7.3c2-.8 4.3-.5 6.2.6" fill="none" stroke="#fff" stroke-width=".55"/></svg>',
+  en: '<svg class="flag" viewBox="0 0 24 16" aria-hidden="true"><rect width="24" height="16" fill="#fff"/><path fill="#B22234" d="M0 0h24v1.23H0zM0 2.46h24v1.23H0zM0 4.92h24v1.23H0zM0 7.38h24v1.23H0zM0 9.85h24v1.23H0zM0 12.31h24v1.23H0zM0 14.77h24V16H0z"/><rect width="9.6" height="8.6" fill="#3C3B6E"/><g fill="#fff"><circle cx="1.6" cy="1.5" r=".42"/><circle cx="3.6" cy="1.5" r=".42"/><circle cx="5.6" cy="1.5" r=".42"/><circle cx="7.6" cy="1.5" r=".42"/><circle cx="2.6" cy="3" r=".42"/><circle cx="4.6" cy="3" r=".42"/><circle cx="6.6" cy="3" r=".42"/><circle cx="1.6" cy="4.5" r=".42"/><circle cx="3.6" cy="4.5" r=".42"/><circle cx="5.6" cy="4.5" r=".42"/><circle cx="7.6" cy="4.5" r=".42"/><circle cx="2.6" cy="6" r=".42"/><circle cx="4.6" cy="6" r=".42"/><circle cx="6.6" cy="6" r=".42"/><circle cx="1.6" cy="7.5" r=".42"/><circle cx="3.6" cy="7.5" r=".42"/><circle cx="5.6" cy="7.5" r=".42"/><circle cx="7.6" cy="7.5" r=".42"/></g></svg>',
+  es: '<svg class="flag" viewBox="0 0 24 16" aria-hidden="true"><rect width="24" height="16" fill="#AA151B"/><rect y="4" width="24" height="8" fill="#F1BF00"/></svg>',
 }
-});
-};
+const LANG_NAME = { pt: 'Português', en: 'English', es: 'Español' }
 
-// Template HTML completo com head e meta tags
-const createFullHtmlTemplate = (bodyContent, title, description, lang) => {
-return `<!DOCTYPE html>
-<html lang="${lang}">
+function langSwitch (page, current) {
+  const items = LOCALES.map((lg) => {
+    const href = page.slug ? `${PREFIX[lg]}/${page.slug}` : `${PREFIX[lg]}/`
+    const cur = lg === current ? ' aria-current="true"' : ''
+    return `<a class="lang__o" href="${href}" hreflang="${HTMLLANG[lg]}" lang="${HTMLLANG[lg]}" title="${LANG_NAME[lg]}" aria-label="${LANG_NAME[lg]}"${cur}>${FLAG[lg]}</a>`
+  }).join('')
+  return `<div class="lang__set lang__set--flags" role="group" aria-label="${SWITCH_LABEL[current]}">${items}</div>`
+}
+
+function translate (html, dict) {
+  if (!dict) return html
+  const root = parse(html, { comment: true })
+  for (const el of root.querySelectorAll('[data-i18n]')) {
+    const v = dict.text?.[el.getAttribute('data-i18n')]
+    if (v !== undefined && v !== '') el.set_content(v)
+  }
+  for (const el of root.querySelectorAll('[data-i18n-ph]')) {
+    const v = dict.attr?.[el.getAttribute('data-i18n-ph')]
+    if (v) el.setAttribute('placeholder', v)
+  }
+  for (const el of root.querySelectorAll('[data-i18n-alt]')) {
+    const v = dict.attr?.[el.getAttribute('data-i18n-alt')]
+    if (v) el.setAttribute('alt', v)
+  }
+  return root.toString()
+}
+
+function document_ (page, lg, body) {
+  const [title, desc] = META[page.file]?.[lg] || [page.title, '']
+  const path = `/${page.slug}`.replace(/\/$/, '') || '/'
+  const canonical = `${SITE_URL}${PREFIX[lg]}${path === '/' ? '/' : path}`
+  const alternates = LOCALES.map((l) =>
+    `  <link rel="alternate" hreflang="${HTMLLANG[l]}" href="${SITE_URL}${PREFIX[l]}${path === '/' ? '/' : path}">`
+  ).join('\n')
+
+  return `<!doctype html>
+<html lang="${HTMLLANG[lg]}">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="${description}">
-<title>${title}</title>
-<link rel="stylesheet" href="/css/core.css">
-<link rel="stylesheet" href="/css/forms.css">
-<link rel="stylesheet" href="/css/index.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${esc(title)}</title>
+  <meta name="description" content="${esc(desc)}">
+  <link rel="canonical" href="${canonical}">
+${alternates}
+  <link rel="alternate" hreflang="x-default" href="${SITE_URL}${path === '/' ? '/' : path}">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Azuton">
+  <meta property="og:locale" content="${lg === 'pt' ? 'pt_BR' : lg === 'es' ? 'es_ES' : 'en_US'}">
+  <meta property="og:title" content="${esc(title)}">
+  <meta property="og:description" content="${esc(desc)}">
+  <meta property="og:url" content="${canonical}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#062A5F">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/css/core.css">
+${existsSync(join(SRC, 'styles', `${page.file}.css`)) ? `  <link rel="stylesheet" href="/css/${page.file}.css">\n` : ''}  <link rel="stylesheet" href="/css/forms.css">
+  <link rel="stylesheet" href="/css/lang.css">
 </head>
 <body>
-${bodyContent}
-<script src="/js/form.js"></script>
-<script src="/js/blog-filters.js"></script>
+${body}
+<script src="/js/forms.js" defer></script>
+<script src="/js/video.js" defer></script>
 </body>
-</html>`;
-};
-
-const build = () => {
-const pages = JSON.parse(fs.readFileSync(PAGES_FILE, 'utf8'));
-
-// Create output directory
-if (!fs.existsSync(OUT_DIR)) {
-console.log(`Creating OUT_DIR: ${OUT_DIR}`);
-fs.mkdirSync(OUT_DIR, { recursive: true });
+</html>
+`
 }
 
-console.log(`✓ Copying CSS and JS folders...`);
-copyFolderSync(path.join(SRC_DIR, 'styles'), path.join(OUT_DIR, 'css'));
-copyFolderSync(path.join(SRC_DIR, 'js'), path.join(OUT_DIR, 'js'));
-console.log(`✓ CSS and JS copied`);
+/* ---------- build ---------- */
+rmSync(DIST, { recursive: true, force: true })
+mkdirSync(join(DIST, 'css'), { recursive: true })
+mkdirSync(join(DIST, 'js'), { recursive: true })
 
-pages.forEach((page) => {
-const pagePath = path.join(SRC_DIR, 'pages', `${page.file}.html`);
-if (!fs.existsSync(pagePath)) {
-console.warn(`Page file not found: ${pagePath}`);
-return;
+for (const f of readdirSync(join(SRC, 'styles'))) {
+  copyFileSync(join(SRC, 'styles', f), join(DIST, 'css', f))
+}
+for (const f of readdirSync(join(SRC, 'js'))) {
+  copyFileSync(join(SRC, 'js', f), join(DIST, 'js', f))
+}
+for (const f of readdirSync(join(ROOT, 'public'))) {
+  copyFileSync(join(ROOT, 'public', f), join(DIST, f))
 }
 
-const baseHtml = fs.readFileSync(pagePath, 'utf8');
-let slug = page.slug;
+const urls = []
+let written = 0
 
-// FIX: Se slug for vazia ou "home", trata como index
-if (!slug || slug === 'home') {
-slug = 'index';
+for (const page of pages) {
+  let raw = readFileSync(join(SRC, 'pages', `${page.file}.html`), 'utf8')
+
+  /**
+   * Scripts inline saem para /js/<pagina>.js. Assim a CSP pode proibir script
+   * inline por completo, que e a defesa mais eficaz contra XSS. O JSON-LD fica
+   * onde esta: tem type proprio e nao e codigo executavel.
+   */
+  const inline = []
+  raw = raw.replace(/<script(?![^>]*\b(?:src|type)=)[^>]*>([\s\S]*?)<\/script>/g, (_m, code) => {
+    inline.push(code.trim())
+    return ''
+  })
+  if (inline.length) {
+    writeFileSync(join(DIST, 'js', `${page.file}.js`), inline.join('\n\n') + '\n')
+    raw = raw.trimEnd() + `\n<script src="/js/${page.file}.js" defer></script>\n`
+  }
+
+  for (const lg of LOCALES) {
+    let body = raw
+      .replaceAll('{{BASE}}', PREFIX[lg])
+      .replaceAll('{{LANGSWITCH}}', langSwitch(page, lg))
+
+    if (lg !== 'pt') {
+      const dp = join(SRC, 'i18n', `${page.file}.${lg}.json`)
+      if (existsSync(dp)) body = translate(body, JSON.parse(readFileSync(dp, 'utf8')))
+    }
+
+    // normaliza a raiz e reescreve o que ja migrou do site antigo
+    body = body.replaceAll('href=""', 'href="/"').replaceAll(`href="${PREFIX[lg]}"`, `href="${PREFIX[lg]}/"`)
+    body = rewriteLegacy(body, PREFIX[lg])
+
+    const outDir = page.slug
+      ? join(DIST, PREFIX[lg].slice(1), page.slug)
+      : join(DIST, PREFIX[lg].slice(1))
+    mkdirSync(outDir, { recursive: true })
+    writeFileSync(join(outDir, 'index.html'), document_(page, lg, body))
+    written++
+
+    const path = `/${page.slug}`.replace(/\/$/, '') || '/'
+    urls.push({ loc: `${SITE_URL}${PREFIX[lg]}${path === '/' ? '/' : path}`, lg, path })
+  }
 }
 
-const meta = META[page.slug] || META.home;
+/* sitemap com alternates por idioma */
+const sitemap = [
+  '<?xml version="1.0" encoding="UTF-8"?>',
+  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">',
+  ...urls.map((u) => [
+    '  <url>',
+    `    <loc>${u.loc}</loc>`,
+    ...LOCALES.map((l) => `    <xhtml:link rel="alternate" hreflang="${HTMLLANG[l]}" href="${SITE_URL}${PREFIX[l]}${u.path === '/' ? '/' : u.path}"/>`),
+    '    <changefreq>weekly</changefreq>',
+    `    <priority>${u.path === '/' ? '1.0' : '0.8'}</priority>`,
+    '  </url>',
+  ].join('\n')),
+  '</urlset>',
+  '',
+].join('\n')
 
-LANGUAGES.forEach((lang) => {
-const i18n = page.slug === 'blog' ? loadBlogI18n(lang) : loadI18n(lang);
-let bodyContent = injectI18n(baseHtml, i18n);
+writeFileSync(join(DIST, 'sitemap.xml'), sitemap)
+writeFileSync(join(DIST, 'robots.txt'), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`)
 
-const [title, description] = meta[lang];
-
-// Create full HTML with head and body
-const fullHtml = createFullHtmlTemplate(bodyContent, title, description, lang);
-
-// Inject meta tags
-const html = injectMeta(fullHtml, title, description);
-
-// Create language-specific directory
-const langDir = lang === DEFAULT_LANG ? OUT_DIR : path.join(OUT_DIR, lang);
-if (!fs.existsSync(langDir)) {
-fs.mkdirSync(langDir, { recursive: true });
-}
-
-// Para home, salva como index.html na raiz do lang
-// Para outras páginas, cria uma pasta com index.html dentro
-let outPath;
-if (slug === 'index') {
-outPath = path.join(langDir, 'index.html');
-} else {
-const pageDir = path.join(langDir, slug);
-if (!fs.existsSync(pageDir)) {
-fs.mkdirSync(pageDir, { recursive: true });
-}
-outPath = path.join(pageDir, 'index.html');
-}
-
-fs.writeFileSync(outPath, html, 'utf8');
-});
-});
-
-// Count pages and verify
-const htmlFiles = fs.readdirSync(OUT_DIR, { recursive: true }).filter(f => f.endsWith('.html'));
-console.log(`✓ Build complete: ${htmlFiles.length} pages generated`);
-console.log(`OUT_DIR exists? ${fs.existsSync(OUT_DIR)}`);
-console.log(`index.html exists? ${fs.existsSync(path.join(OUT_DIR, 'index.html'))}`);
-console.log(`css folder exists? ${fs.existsSync(path.join(OUT_DIR, 'css'))}`);
-console.log(`js folder exists? ${fs.existsSync(path.join(OUT_DIR, 'js'))}`);
-};
-
-build();
+console.log(`build: ${written} paginas em ${LOCALES.length} idiomas`)
+console.log(`sitemap: ${urls.length} URLs`)
