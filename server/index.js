@@ -73,6 +73,54 @@ app.post('/api/lead',
   lead
 )
 
+/**
+ * Redirecionamentos 301 das URLs do site antigo (WordPress).
+ *
+ * Chaves sem barra final e em minusculas: o lookup normaliza /parceiros/,
+ * /Parceiros e /parceiros para a mesma entrada. A query string vai junto
+ * (utm, gclid), para nao perder a atribuicao de quem chega por anuncio.
+ */
+const VOZ_IA = '/pabx-voz-ia'
+const REDIRECT = {
+  // paginas antigas aposentadas -> PABX com Voz IA
+  '/revenda-parceria-pabx-nuvem': VOZ_IA,
+  '/parceiros': VOZ_IA,
+  '/azuphone': VOZ_IA,
+  '/azuphone2': VOZ_IA,
+  '/azuphone-planos': VOZ_IA,
+  '/depoimentos-de-clientes': VOZ_IA,
+  '/link-dedicado': VOZ_IA,
+  '/azuton-sms': VOZ_IA,
+  '/chatbot-whatsapp': VOZ_IA,
+  '/landing-page-azutomatize': VOZ_IA,
+  '/politica-de-privacidade': VOZ_IA,
+  '/como-o-voip-se-tornou-tao-importante': VOZ_IA,
+  '/azu-automatize-a-importancia-da-automatizacao-dentro-das-empresas': VOZ_IA,
+  '/iot-em-lpwa': VOZ_IA,
+  '/pabxvirtual': VOZ_IA, // lp.azuton.com/pabxvirtual/, caso o subdominio aponte para ca
+
+  // equivalentes diretos no site novo
+  '/pabx-nuvem': '/azuphone-pabx-nuvem',
+  '/pabx virtual': '/pabx-virtual', // a URL antiga do WordPress tinha um espaco no meio
+  '/pabx-virtual-empresarial': '/pabx-virtual',
+  '/voz-ia': '/pabx-voz-ia',
+  '/integracoes': '/integracoes-agentes-ia',
+  '/solucoes-azuton': '/solucoes',
+  '/download': '/downloads',
+  '/azuphone/downloads': '/downloads',
+}
+
+app.use((req, res, next) => {
+  if (req.method !== 'GET' && req.method !== 'HEAD') return next()
+  let path
+  try { path = decodeURIComponent(req.path) } catch { return next() }
+  path = path.toLowerCase().replace(/\/+$/, '') || '/'
+  const dest = REDIRECT[path]
+  if (!dest) return next()
+  const q = req.originalUrl.indexOf('?')
+  res.redirect(301, dest + (q === -1 ? '' : req.originalUrl.slice(q)))
+})
+
 /* ---------- estaticos ---------- */
 // assets com hash de conteudo nao mudam: cache longo. HTML sempre revalidado.
 app.use('/css', express.static(join(DIST, 'css'), { maxAge: '7d' }))
@@ -107,22 +155,6 @@ app.get(/^\/[^.]*$/, (req, res, next) => {
 })
 
 app.use(express.static(DIST, { index: false, redirect: false, maxAge: '1h' }))
-
-/* redirecoes das URLs do site antigo */
-const REDIRECT = {
-  '/azuphone': '/azuphone-pabx-nuvem',
-  '/pabx-nuvem': '/azuphone-pabx-nuvem',
-  // a URL antiga do WordPress tinha um espaco no meio: /pabx virtual/
-  '/pabx%20virtual': '/pabx-virtual',
-  '/pabx virtual': '/pabx-virtual',
-  '/pabx-virtual-empresarial': '/pabx-virtual',
-  '/voz-ia': '/pabx-voz-ia',
-  '/integracoes': '/integracoes-agentes-ia',
-  '/solucoes-azuton': '/solucoes',
-  '/download': '/downloads',
-  '/azuphone/downloads': '/downloads',
-}
-app.get(Object.keys(REDIRECT), (req, res) => res.redirect(301, REDIRECT[req.path]))
 
 app.use((req, res) => {
   res.status(404)
